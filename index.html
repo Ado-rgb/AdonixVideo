@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎬 Adonix Video</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fafafa;
+      padding: 30px;
+      text-align: center;
+      color: #333;
+    }
+    h1 {
+      color: #cc0000;
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 14px;
+      font-size: 1rem;
+      width: 90%;
+      max-width: 400px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 2px solid #cc0000;
+    }
+    button {
+      background: #cc0000;
+      color: #fff;
+      cursor: pointer;
+    }
+    video {
+      margin-top: 25px;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #555;
+    }
+    .creator-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .creator-btn:hover {
+      background: #1ea955;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔥 AdonixVideo ⭐</h1>
+
+  <input type="text" id="url" placeholder="Pega tu enlace de YouTube aquí..." />
+  <br />
+  <button onclick="descargar()">🔱 Ver Video</button>
+
+  <div id="resultado"></div>
+
+  <div class="footer">
+    <p>Hecho por Ado</p>
+    <button class="creator-btn" onclick="window.open('https://wa.me/50493732693', '_blank')">📞 Creador</button>
+  </div>
+
+  <script>
+    let videoUrl = ''
+    let nombre = 'video.mp4'
+
+    async function descargar() {
+      const url = document.getElementById('url').value.trim()
+      const resultado = document.getElementById('resultado')
+      resultado.innerHTML = 'Espera we, un momento...'
+
+      if (!url) {
+        resultado.innerHTML = 'Pero w ingresá un enlace válido de YouTube'
+        return
+      }
+
+      try {
+        const res = await fetch(`https://api.sylphy.xyz/download/ytmp4?url=${encodeURIComponent(url)}&apikey=Sylphiette's`)
+        const data = await res.json()
+
+        if (!data?.status || !data?.res?.url) {
+          resultado.innerHTML = '❌ No se pudo descargar el video.'
+          return
+        }
+
+        videoUrl = data.res.url
+        nombre = limpiarNombre(data.res.title || 'video') + '.mp4'
+
+        resultado.innerHTML = `
+          <h3>${data.res.title}</h3>
+          <video controls src="${videoUrl}"></video>
+          <br/><br/>
+          <button onclick="descargarVideo()">🪼 Descargar</button>
+        `
+      } catch (e) {
+        console.error(e)
+        resultado.innerHTML = '❌ Error al contactar con la API.'
+      }
+    }
+
+    function descargarVideo() {
+      const a = document.createElement('a')
+      a.href = videoUrl
+      a.download = nombre
+      a.style.display = 'none'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    }
+
+    function limpiarNombre(nombre) {
+      return nombre.replace(/[\\\/:*?"<>|]/g, '').trim()
+    }
+  </script>
+
+</body>
+</html>
