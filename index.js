@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express') // Falta esto
 const fs = require('fs')
 const cors = require('cors')
 const path = require('path')
