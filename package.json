@@ -1,0 +1,13 @@
+{
+  "name": "adonix-video-dl",
+  "version": "1.0.0",
+  "description": "Sitio web para descargar videos de YouTube",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
