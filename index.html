@@ -1,209 +1,174 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adonix Video - Descarga de YouTube</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎬 Adonix Video</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
     body {
-      background: linear-gradient(to bottom, #121212, #1e1e1e);
-      color: #f2f2f2;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background-color: #202020;
-      padding: 1.5rem 1rem;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff, #f5f5f5);
+      padding: 30px;
       text-align: center;
-      border-bottom: 2px solid #3c3c3c;
+      color: #333;
     }
-
-    .logo {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #00ffe0;
+    h1 {
+      color: #cc0000;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 2px #00000020;
     }
-
-    .logo span {
-      color: #ff00cc;
-    }
-
-    .tagline {
+    input, button {
+      padding: 14px;
       font-size: 1rem;
-      color: #bbb;
+      width: 90%;
+      max-width: 400px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 2px solid #cc0000;
+      box-shadow: 0 2px 4px #00000010;
     }
-
-    .main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-
-    .download-card {
-      background-color: #2a2a2a;
-      padding: 2rem;
-      border-radius: 16px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .card-title {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #00ffe0;
-      text-align: center;
-    }
-
-    .input-group {
-      display: flex;
-      gap: 0.5rem;
-      flex-direction: column;
-    }
-
-    input[type="text"] {
-      padding: 0.8rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      width: 100%;
-      background-color: #1e1e1e;
-      color: #fff;
-    }
-
     button {
-      padding: 0.8rem;
-      background-color: #00ffe0;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background-color: #00e6cc;
-    }
-
-    .loading {
-      text-align: center;
-      margin-top: 1rem;
-      display: none;
-    }
-
-    .spinner {
-      width: 30px;
-      height: 30px;
-      border: 4px solid #999;
-      border-top: 4px solid #00ffe0;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: auto;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .results {
-      margin-top: 1.5rem;
-    }
-
-    footer {
-      background-color: #202020;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9rem;
-      border-top: 2px solid #3c3c3c;
-    }
-
-    .social-links {
-      margin: 1rem 0;
-    }
-
-    .social-link {
-      color: #ccc;
-      margin: 0 0.5rem;
-      font-size: 1.2rem;
-      transition: color 0.3s;
-    }
-
-    .social-link:hover {
-      color: #00ffe0;
-    }
-
-    .theme-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #2a2a2a;
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
+      background: #cc0000;
       color: #fff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
     }
-
-    @media (max-width: 500px) {
-      .download-card {
-        padding: 1.5rem 1rem;
-      }
-
-      .input-group {
-        flex-direction: column;
-      }
+    button:hover { background: #a80000; }
+    .result-item {
+      margin-top: 20px;
+      text-align: left;
+      max-width: 480px;
+      margin: 20px auto;
+      border: 1px solid #cc0000;
+      border-radius: 10px;
+      padding: 15px;
+      background: #fff;
+      box-shadow: 0 0 10px #cc000022;
+      cursor: pointer;
     }
+    .result-item img { width: 100%; border-radius: 10px; }
+    .result-info h3 { margin: 0 0 10px; color: #cc0000; }
+    .download-buttons button {
+      width: 48%; margin: 5px 1%; padding: 12px; font-weight: bold;
+      border-radius: 8px; border: none; color: #fff; transition: 0.3s ease;
+    }
+    .download-mp4 { background: #cc0000; }
+    .download-mp3 { background: #25D366; }
+    .download-mp4:hover { background: #a80000; }
+    .download-mp3:hover { background: #1ea955; }
+    .spinner {
+      margin-top: 20px; width: 40px; height: 40px;
+      border: 5px solid #ccc; border-top-color: #cc0000;
+      border-radius: 50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <header>
-    <h1 class="logo">Adonix <span>VIDEO</span></h1>
-    <p class="tagline">Descarga audio y video de YouTube fácil y rápido</p>
-  </header>
+  <h1>🔥 AdonixVideo ⭐</h1>
+  <input type="text" id="searchInput" placeholder="Pega el enlace o busca por nombre..." />
+  <br />
+  <button onclick="buscar()">🔍 Buscar</button>
+  <div id="resultado"></div>
 
-  <main class="main">
-    <div class="download-card">
-      <h2 class="card-title"><i class="fas fa-download"></i> Descargar contenido</h2>
-      <div class="input-group">
-        <input type="text" id="searchInput" placeholder="Pega el enlace o busca una canción o video...">
-        <button id="searchBtn"><i class="fas fa-search"></i> Buscar</button>
-      </div>
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Buscando contenido...</p>
-      </div>
-      <div class="results" id="results"></div>
-    </div>
-  </main>
+  <script>
+    const sylphyApiKey = "Sylphiette's";
 
-  <footer>
-    <p>© 2025 Adonix Video por Ado. Todos los derechos reservados.</p>
-    <div class="social-links">
-      <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-      <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-      <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-    </div>
-    <p>Este servicio es solo para fines educativos. Respeta los derechos de autor.</p>
-  </footer>
+    async function buscar() {
+      const query = document.getElementById('searchInput').value.trim();
+      const resultado = document.getElementById('resultado');
+      resultado.innerHTML = '<div class="spinner"></div><p>Buscando we espera...</p>';
 
-  <div class="theme-toggle" id="themeToggle">
-    <i class="fas fa-moon"></i>
-  </div>
+      if (!query) {
+        return resultado.innerHTML = '🥴 Poné un enlace o texto válido primero';
+      }
 
-  <script src="script.js"></script>
+      const esLink = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//.test(query);
+      if (esLink) {
+        mostrarDescargas({ url: query, title: query });
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(query)}`);
+        const json = await res.json();
+
+        if (!Array.isArray(json.data) || json.data.length === 0) {
+          return resultado.innerHTML = '❌ No se encontraron resultados.';
+        }
+
+        resultado.innerHTML = json.data.map(v => `
+          <div class="result-item" onclick='mostrarDescargas(${JSON.stringify(v)})'>
+            <img src="${v.thumbnail}" />
+            <div class="result-info">
+              <h3>${v.title}</h3>
+              <p>${v.author.name}</p>
+              <p>${v.duration}</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+        resultado.innerHTML = '❌ Error al buscar videos.';
+      }
+    }
+
+    async function mostrarDescargas(video) {
+      const resultado = document.getElementById('resultado');
+      resultado.innerHTML = '<div class="spinner"></div><p>Cargando descargas...</p>';
+      const safe = (video.title || "video").replace(/[\\\/:*?"<>|]/g, '').trim().replace(/\s+/g, '_');
+
+      try {
+        const resMp4 = await fetch(`https://api.sylphy.xyz/download/ytmp4?url=${encodeURIComponent(video.url)}&apikey=${encodeURIComponent(sylphyApiKey)}`);
+        const mp4 = await resMp4.json();
+
+        const resMp3 = await fetch(`https://theadonix-api.vercel.app/api/ytmp3?url=${encodeURIComponent(video.url)}`);
+        const mp3 = await resMp3.json();
+
+        const mp4url = mp4?.status === true ? mp4?.res?.url : null;
+        const mp3url = mp3?.status === 200 ? mp3?.result?.audio : null;
+
+        if (!mp4url || !mp3url) {
+          resultado.innerHTML = '❌ No se pudo obtener los enlaces de descarga.';
+          return;
+        }
+
+        resultado.innerHTML = `
+          <h3>${video.title}</h3>
+          <img src="${video.thumbnail || ''}" style="width:100%;border-radius:12px;margin-bottom:10px;">
+          <div class="download-buttons">
+            <button class="download-mp4" onclick="descargarArchivo('${mp4url}', '${safe}.mp4')">📹 Video</button>
+            <button class="download-mp3" onclick="descargarArchivo('${mp3url}', '${safe}.mp3')">🎵 Audio</button>
+          </div>
+          <br><button onclick="resetear()">🔙 Volver</button>
+        `;
+      } catch (e) {
+        console.error('❌ Error en la descarga:', e);
+        resultado.innerHTML = '❌ Error al obtener descargas.';
+      }
+    }
+
+    function descargarArchivo(url, filename) {
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(a.href);
+        })
+        .catch(() => alert('❌ Error al descargar el archivo'));
+    }
+
+    function resetear() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('resultado').innerHTML = '';
+    }
+  </script>
 </body>
 </html>
