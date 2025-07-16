@@ -1,47 +1,203 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adonix Video - YouTube Video/Audio Downloader</title>
+  <title>Adonix Video - Descarga de YouTube</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #121212, #1e1e1e);
+      color: #f2f2f2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #202020;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 2px solid #3c3c3c;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #00ffe0;
+    }
+
+    .logo span {
+      color: #ff00cc;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      color: #bbb;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .download-card {
+      background-color: #2a2a2a;
+      padding: 2rem;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #00ffe0;
+      text-align: center;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: column;
+    }
+
+    input[type="text"] {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      width: 100%;
+      background-color: #1e1e1e;
+      color: #fff;
+    }
+
+    button {
+      padding: 0.8rem;
+      background-color: #00ffe0;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: #00e6cc;
+    }
+
+    .loading {
+      text-align: center;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .spinner {
+      width: 30px;
+      height: 30px;
+      border: 4px solid #999;
+      border-top: 4px solid #00ffe0;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .results {
+      margin-top: 1.5rem;
+    }
+
+    footer {
+      background-color: #202020;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 2px solid #3c3c3c;
+    }
+
+    .social-links {
+      margin: 1rem 0;
+    }
+
+    .social-link {
+      color: #ccc;
+      margin: 0 0.5rem;
+      font-size: 1.2rem;
+      transition: color 0.3s;
+    }
+
+    .social-link:hover {
+      color: #00ffe0;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #2a2a2a;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 500px) {
+      .download-card {
+        padding: 1.5rem 1rem;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1 class="logo">Adonix <span>VIDEO</span></h1>
-      <p class="tagline">Download YouTube videos and audio easily - by Ado 2025</p>
-    </div>
+    <h1 class="logo">Adonix <span>VIDEO</span></h1>
+    <p class="tagline">Descarga audio y video de YouTube fácil y rápido</p>
   </header>
 
   <main class="main">
-    <div class="container">
-      <div class="download-card">
-        <h2 class="card-title"><i class="fas fa-download"></i> Download Content</h2>
-        <div class="input-group">
-          <input type="text" id="searchInput" placeholder="Enter YouTube URL or search term..." autocomplete="off">
-          <button id="searchBtn"><i class="fas fa-search"></i> Search</button>
-        </div>
-        <div class="loading" id="loading">
-          <div class="spinner"></div>
-          <p>Searching for content...</p>
-        </div>
-        <div class="results" id="results"></div>
+    <div class="download-card">
+      <h2 class="card-title"><i class="fas fa-download"></i> Descargar contenido</h2>
+      <div class="input-group">
+        <input type="text" id="searchInput" placeholder="Pega el enlace o busca una canción o video...">
+        <button id="searchBtn"><i class="fas fa-search"></i> Buscar</button>
       </div>
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Buscando contenido...</p>
+      </div>
+      <div class="results" id="results"></div>
     </div>
   </main>
 
   <footer>
-    <div class="container">
-      <p>© 2025 Adonix Video by Ado. All rights reserved.</p>
-      <div class="social-links">
-        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-      </div>
-      <p>This service is for educational purposes only. Respect copyright.</p>
+    <p>© 2025 Adonix Video por Ado. Todos los derechos reservados.</p>
+    <div class="social-links">
+      <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
     </div>
+    <p>Este servicio es solo para fines educativos. Respeta los derechos de autor.</p>
   </footer>
 
   <div class="theme-toggle" id="themeToggle">
