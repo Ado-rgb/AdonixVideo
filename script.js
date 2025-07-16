@@ -1,117 +1,116 @@
-
 document.addEventListener('DOMContentLoaded', function () {
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const resultsDiv = document.getElementById('results');
-    const loadingDiv = document.getElementById('loading');
-    const themeToggle = document.getElementById('themeToggle');
-    
-    let currentType = 'video';
+  const searchBtn = document.getElementById('searchBtn');
+  const searchInput = document.getElementById('searchInput');
+  const resultsDiv = document.getElementById('results');
+  const loadingDiv = document.getElementById('loading');
+  const themeToggle = document.getElementById('themeToggle');
 
-    searchBtn.addEventListener('click', search);
-    searchInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') search();
-    });
+  const API_KEY = "Sylphiette's";
 
-    function search() {
-        const query = searchInput.value.trim();
-        if (!query) {
-            alert('Ingresa una URL de YouTube o el name del video');
-            return;
-        }
+  searchBtn.addEventListener('click', search);
+  searchInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') search();
+  });
 
-        loadingDiv.style.display = 'block';
-        resultsDiv.style.display = 'none';
-        resultsDiv.innerHTML = '';
-
-        const apiUrl = `https://hanstz-hansapi.hf.space/yt?query=${encodeURIComponent(query)}`;
-
-        fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(data => {
-                if (data.success && data.result) {
-                    displayResult(data.result);
-                } else {
-                    throw new Error('Invalid response format');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                loadingDiv.style.display = 'none';
-                resultsDiv.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: #e74c3c;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                        <p>Failed to fetch results. Please try again later.</p>
-                        <p style="font-size: 0.8rem;">${error.message}</p>
-                    </div>
-                `;
-                resultsDiv.style.display = 'block';
-            });
+  function search() {
+    const query = searchInput.value.trim();
+    if (!query) {
+      alert('Ingresa una URL o nombre de video');
+      return;
     }
 
-    function displayResult(video) {
-        loadingDiv.style.display = 'none';
-        const thumbnailUrl = video.thumbnail || video.image || '';
-        const duration = video.timestamp || video.duration?.timestamp || 'N/A';
-        const views = video.views ? video.views.toLocaleString() + ' views' : '';
-        const uploadDate = video.ago || '';
-        const url = video.url || '';
+    loadingDiv.style.display = 'block';
+    resultsDiv.style.display = 'none';
+    resultsDiv.innerHTML = '';
 
-        const html = `
-            <div class="result-item">
-                <div class="thumbnail-container">
-                    ${thumbnailUrl ? `<img src="${thumbnailUrl}" alt="Thumbnail" class="thumbnail">` : ''}
-                    <span class="content-type">RESULT</span>
-                </div>
-                <div class="video-info">
-                    <h3 class="video-title">${video.title || 'Untitled Video'}</h3>
-                    <div class="video-meta">
-                        <span><i class="fas fa-clock"></i> ${duration}</span>
-                        ${views ? `<span><i class="fas fa-eye"></i> ${views}</span>` : ''}
-                        ${uploadDate ? `<span><i class="fas fa-calendar-alt"></i> ${uploadDate}</span>` : ''}
-                        ${video.author?.name ? `<span><i class="fas fa-user"></i> ${video.author.name}</span>` : ''}
-                    </div>
-                    <button class="download-btn" data-url="https://api.sylphy.xyz/download/ytmp4?url=${url}&apikey=Sylphiette's">
-                        <i class="fas fa-video"></i> Download Video
-                    </button>
-                    <button class="download-btn" data-url="https://api.sylphy.xyz/download/ytmp3?url=${url}&apikey=Sylphiette's">
-                        <i class="fas fa-music"></i> Download MP3
-                    </button>
-                </div>
-            </div>
-        `;
+    const apiUrl = `https://hanstz-hansapi.hf.space/yt?query=${encodeURIComponent(query)}`;
 
-        resultsDiv.innerHTML = html;
-        resultsDiv.style.display = 'block';
-
-        document.querySelectorAll('.download-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const downloadUrl = this.dataset.url;
-                if (downloadUrl) {
-                    window.open(downloadUrl, '_blank');
-                } else {
-                    alert('Download URL not available');
-                }
-            });
-        });
-    }
-
-    themeToggle.addEventListener('click', function () {
-        document.body.classList.toggle('dark-theme');
-        const icon = this.querySelector('i');
-        if (document.body.classList.contains('dark-theme')) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-            document.documentElement.style.setProperty('--light', '#2c3e50');
-            document.documentElement.style.setProperty('--dark', '#ecf0f1');
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status && data.res) {
+          displayResult(data.res);
         } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-            document.documentElement.style.setProperty('--light', '#ecf0f1');
-            document.documentElement.style.setProperty('--dark', '#2c3e50');
+          throw new Error('Error en la respuesta de la API');
         }
+      })
+      .catch(error => {
+        loadingDiv.style.display = 'none';
+        resultsDiv.style.display = 'block';
+        resultsDiv.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: #e74c3c;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <p>No se pudo obtener el resultado. Intenta más tarde.</p>
+            <p style="font-size: 0.8rem;">${error.message}</p>
+          </div>
+        `;
+      });
+  }
+
+  function displayResult(video) {
+    loadingDiv.style.display = 'none';
+
+    const ytUrl = video.url; // URL original YouTube o link válido para Sylphiette
+
+    const html = `
+      <div class="result-item">
+        <div class="thumbnail-container">
+          ${video.thumbnail ? `<img src="${video.thumbnail}" class="thumbnail" alt="Miniatura">` : ''}
+          <span class="content-type">RESULTADO</span>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">${video.title}</h3>
+          <button class="download-btn" id="btnMp4">
+            <i class="fas fa-video"></i> Descargar Video
+          </button>
+          <button class="download-btn" id="btnMp3">
+            <i class="fas fa-music"></i> Descargar MP3
+          </button>
+        </div>
+      </div>
+    `;
+
+    resultsDiv.innerHTML = html;
+    resultsDiv.style.display = 'block';
+
+    const safeTitle = video.title.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+
+    document.getElementById('btnMp4').addEventListener('click', () => {
+      const sylphUrl = `https://api.sylphy.xyz/download/ytmp4?url=${encodeURIComponent(ytUrl)}&apikey=${encodeURIComponent(API_KEY)}`;
+      downloadFile(sylphUrl, safeTitle + '.mp4');
     });
+
+    document.getElementById('btnMp3').addEventListener('click', () => {
+      const sylphUrl = `https://api.sylphy.xyz/download/ytmp3?url=${encodeURIComponent(ytUrl)}&apikey=${encodeURIComponent(API_KEY)}`;
+      downloadFile(sylphUrl, safeTitle + '.mp3');
+    });
+  }
+
+  function downloadFile(url, filename) {
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo obtener el archivo');
+        return res.blob();
+      })
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(link.href);
+      })
+      .catch(() => alert('Error al descargar el archivo'));
+  }
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const icon = themeToggle.querySelector('i');
+    if (document.body.classList.contains('dark-theme')) {
+      icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+      icon.classList.replace('fa-sun', 'fa-moon');
+    }
+  });
 });
